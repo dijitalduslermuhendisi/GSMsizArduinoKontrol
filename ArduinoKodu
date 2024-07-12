@@ -1,0 +1,57 @@
+#include<SoftwareSerial.h>
+
+#define RX_PIN 2
+#define TX_PIN 3
+
+#define RED_PIN 9
+#define GREEN_PIN 10
+#define BLUE_PIN 11
+
+
+SoftwareSerial bluetooth(RX_PIN, TX_PIN);
+ 
+void setup() {
+ Serial.begin(9600);
+
+ pinMode(RED_PIN, OUTPUT);
+ pinMode(GREEN_PIN, OUTPUT);
+ pinMode(BLUE_PIN, OUTPUT);
+
+ turnoffLED();
+}
+
+void loop() {
+  if(bluetooth.available()){
+     String command = bluetooth.readStringUntil ('\n');
+     command.trim();
+     Serial.println("Received command: " + command);
+
+     
+     if(command == "kırmızı"){
+       setColor(255, 0, 0);
+      } else if (command == "yeşil"){
+         setColor(0, 255, 0);
+       } else if (command == "mavi"){
+         setColor(0, 0, 255);
+        } else if(command == "ledi yak"){
+           setColor(255, 255, 255);
+          } else if (command == "ledi kapat"){
+             turnoffLED();
+            }
+     
+    }
+}
+
+
+void setColor (int red, int green, int blue){
+   analogWrite(RED_PIN, red);
+   analogWrite(GREEN_PIN, green);
+   analogWrite(BLUE_PIN, blue);
+   
+  }
+
+void turnoffLED(){
+   analogWrite(RED_PIN, 0);
+   analogWrite(GREEN_PIN, 0);
+   analogWrite(BLUE_PIN, 0);
+  }
